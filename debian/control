@@ -1,0 +1,26 @@
+Source: python-asyncio-mqtt
+Section: python
+Priority: optional
+Maintainer: Debian Python Team <team+python@tracker.debian.org>
+Uploaders: Martin <debacle@debian.org>
+Build-Depends: debhelper-compat (= 13),
+	dh-python,
+	python3,
+	python3-paho-mqtt,
+	python3-setuptools,
+Standards-Version: 4.6.0
+Rules-Requires-Root: no
+Vcs-Git: https://salsa.debian.org/python-team/packages/python-asyncio-mqtt.git
+Vcs-Browser: https://salsa.debian.org/python-team/packages/python-asyncio-mqtt
+Homepage: https://github.com/sbtinstruments/asyncio-mqtt
+
+Package: python3-asyncio-mqtt
+Architecture: all
+Depends: ${python3:Depends},
+	 ${misc:Depends}
+Provides: ${python3:Provides}
+Description: Idomatic asyncio wrapper around paho-mqtt
+ asyncio-mqtt combines the stability of the time-proven paho-mqtt
+ library with a modern, asyncio-based interface.
+ .
+ Expect API changes below version 1.0.0.
