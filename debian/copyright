@@ -3,7 +3,8 @@ Upstream-Name: asyncio-mqtt
 Source: https://github.com/sbtinstruments/asyncio-mqtt
 
 Files: *
-Copyright: 2020-2021 Frederik Aalund <fpa@sbtinstruments.com>
+Copyright: 2020 SBT Instruments
+           2020-2021 Frederik Aalund <fpa@sbtinstruments.com>
 License: BSD-3-clause
 
 Files: debian/*
