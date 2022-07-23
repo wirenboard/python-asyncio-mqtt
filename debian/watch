@@ -1,0 +1,2 @@
+version=4
+opts=filenamemangle=s/.*\/v(\d\S+)\.tar\.gz/asyncio-mqtt-$1\.tar\.gz/ https://github.com/sbtinstruments/asyncio-mqtt/tags .*\/v(\d\S+)\.tar\.gz

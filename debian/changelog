@@ -2,6 +2,7 @@ python-asyncio-mqtt (0.10.0-3) UNRELEASED; urgency=medium
 
   * Set upstream metadata fields: Bug-Database, Bug-Submit, Repository,
     Repository-Browse.
+  * Add debian/watch file, using github.
 
  -- Debian Janitor <janitor@jelmer.uk>  Sat, 23 Jul 2022 22:56:33 -0000
 
