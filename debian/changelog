@@ -1,3 +1,10 @@
+python-asyncio-mqtt (0.10.0-3) UNRELEASED; urgency=medium
+
+  * Set upstream metadata fields: Bug-Database, Bug-Submit, Repository,
+    Repository-Browse.
+
+ -- Debian Janitor <janitor@jelmer.uk>  Sat, 23 Jul 2022 22:56:33 -0000
+
 python-asyncio-mqtt (0.10.0-2) unstable; urgency=medium
 
   * Source-only upload
