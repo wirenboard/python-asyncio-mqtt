@@ -1,11 +1,12 @@
 python-asyncio-mqtt (0.10.0-3) UNRELEASED; urgency=medium
 
+  [ Debian Janitor ]
   * Set upstream metadata fields: Bug-Database, Bug-Submit, Repository,
     Repository-Browse.
   * Add debian/watch file, using github.
   * Update standards version to 4.6.1, no changes needed.
 
- -- Debian Janitor <janitor@jelmer.uk>  Sat, 23 Jul 2022 22:56:33 -0000
+ -- Jelmer Vernooĳ <jelmer@debian.org>  Mon, 17 Oct 2022 00:02:29 +0100
 
 python-asyncio-mqtt (0.10.0-2) unstable; urgency=medium
 
