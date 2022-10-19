@@ -1,12 +1,13 @@
 ![license](https://img.shields.io/github/license/sbtinstruments/asyncio-mqtt)
 ![semver](https://img.shields.io/github/v/tag/sbtinstruments/asyncio-mqtt?sort=semver)
+[![PyPI](https://img.shields.io/pypi/v/asyncio-mqtt)](https://pypi.org/project/asyncio-mqtt/)
 
 # MQTT client with idiomatic asyncio interface 🙌
 
 Write code like this:
 
-
 ##### Subscriber
+
 ```python
 async with Client("test.mosquitto.org") as client:
     async with client.filtered_messages("floors/+/humidity") as messages:
@@ -16,6 +17,7 @@ async with Client("test.mosquitto.org") as client:
 ```
 
 ##### Publisher
+
 ```python
 async with Client("test.mosquitto.org") as client:
     message = "10%"
@@ -25,18 +27,16 @@ async with Client("test.mosquitto.org") as client:
           )
 ```
 
-
-
 asyncio-mqtt combines the stability of the time-proven [paho-mqtt](https://github.com/eclipse/paho.mqtt.python) library with a modern, asyncio-based interface.
 
-* No more callbacks! 👍
-* No more return codes (welcome to the `MqttError`)
-* Graceful disconnection (forget about `on_unsubscribe`, `on_disconnect`, etc.)
-* Compatible with `async` code
-* Fully type-hinted
-* Did we mention no more callbacks?
+- No more callbacks! 👍
+- No more return codes (welcome to the `MqttError`)
+- Graceful disconnection (forget about `on_unsubscribe`, `on_disconnect`, etc.)
+- Compatible with `async` code
+- Fully type-hinted
+- Did we mention no more callbacks?
 
-The whole thing is less than [600 lines of code](https://github.com/sbtinstruments/asyncio-mqtt/blob/master/asyncio_mqtt/client.py).
+The whole thing is less than [700 lines of code](https://github.com/sbtinstruments/asyncio-mqtt/blob/master/asyncio_mqtt/client.py).
 
 ## Installation 📚
 
@@ -122,8 +122,8 @@ async def cancel_tasks(tasks):
     for task in tasks:
         if task.done():
             continue
-        task.cancel()
         try:
+            task.cancel()
             await task
         except asyncio.CancelledError:
             pass
@@ -144,47 +144,105 @@ async def main():
 asyncio.run(main())
 ```
 
-## Alternative asyncio-based MQTT clients
+## TLS configuration for MQTT client
+
+asyncio-mqtt also exposes paho-mqtt's `tls_set` functionality for the users. The following minimal example explains how to enable SSL/TLS support for asyncio-mqtt client
+
+```python
+import ssl
+from asyncio_mqtt import Client, TLSParameters, ProtocolVersion
+
+"""
+ca_certs          : a string path to the Certificate Authority certificate files
+                    that are to be treated as trusted by this client
+certfile & keyfile: strings pointing to the PEM encoded client certificate and
+                    private keys respectively
+cert_reqs         : allows the certificate requirements that the client imposes on
+                    the broker to be changed. By default this is ssl.CERT_REQUIRED
+tls_version       : allows the version of the SSL/TLS protocol used to be specified.
+                    By default TLS v1 is used
+ciphers           : string specifying which encryption ciphers are allowable for this
+                    connection, or None to use the defaults
+keyfile_password  : if either certfile or keyfile is encrypted and needs a password to
+                    decrypt it, then this can be passed using the keyfile_password
+                    argument. If you do not provide keyfile_password, the password will
+                    be requested to be typed in at a terminal window
+"""
+tls_params = TLSParameters(
+    ca_certs="/path/to/certificates",
+    certfile="/path/to/certfile",
+    keyfile="/path/to/keyfile",
+    cert_reqs=ssl.CERT_REQUIRED,
+    tls_version=ssl.PROTOCOL_TLSv2,
+    ciphers=None,
+    keyfile_password=None,
+)
+
+async with Client(
+    "test.mosquitto.org",
+    username="username",
+    password="password",
+    protocol=ProtocolVersion.V31,
+    tls_params=tls_params,
+) as client:
+    async with client.filtered_messages("floors/+/humidity") as messages:
+        # subscribe is done afterwards so that we just start receiving messages
+        # from this point on
+        await client.subscribe("floors/#")
+        async for message in messages:
+            print(message.topic)
+            print(json.loads(message.payload))
+```
+
+## Proxy settings for asyncio-mqtt client
+
+asyncio-mqtt allows the user to configure proxing of MQTT connection and enables the support for SOCKS or HTTP proxies. asyncio-mqtt uses the paho-mqtt `proxy_set` functionality to allow setting up the proxy. One thing to note here is that setting up a proxy is an extra feature (even in paho-mqtt) that requires the `PySocks` dependency.
+
+The following minimal example depicts how to configure proxing of the MQTT connection
+
+```python
+import socks
+from asyncio_mqtt import Client, ProxySettings
+
+proxy_params = ProxySettings(
+    proxy_type=socks.HTTP,
+    proxy_addr="example.com",
+    proxy_rdns=True,
+    proxy_username="username",
+    proxy_password="password",
+)
+
+async with Client(
+    "test.mosquitto.org",
+    username="username",
+    password="password",
+    protocol=ProtocolVersion.V31,
+    procxy=proxy_params,
+) as client:
+    ...
+    ...
+```
+
+## Related projects
 
 Is asyncio-mqtt not what you are looking for? Try another client:
 
- * [hbmqtt](https://github.com/beerfactory/hbmqtt) - Own protocol implementation. Includes a broker.  
-   ![GitHub stars](https://img.shields.io/github/stars/beerfactory/hbmqtt)
-   ![license](https://img.shields.io/github/license/beerfactory/hbmqtt)
- * [gmqtt](https://github.com/wialon/gmqtt) - Own protocol implementation. No dependencies.  
-   ![GitHub stars](https://img.shields.io/github/stars/wialon/gmqtt)
-   ![license](https://img.shields.io/github/license/wialon/gmqtt)
- * [aiomqtt](https://github.com/mossblaser/aiomqtt) - Wrapper around paho-mqtt.  
-   ![GitHub stars](https://img.shields.io/github/stars/mossblaser/aiomqtt)
-   ![license](https://img.shields.io/github/license/mossblaser/aiomqtt)
- * [mqttools](https://github.com/eerimoq/mqttools) - Own protocol implementation. No dependencies.  
-   ![GitHub stars](https://img.shields.io/github/stars/eerimoq/mqttools)
-   ![license](https://img.shields.io/github/license/eerimoq/mqttools)
- * [aio-mqtt](https://github.com/NotJustAToy/aio-mqtt) - Own protocol implementation. No dependencies.  
-   ![GitHub stars](https://img.shields.io/github/stars/NotJustAToy/aio-mqtt)
-   ![license](https://img.shields.io/github/license/NotJustAToy/aio-mqtt)
-
-This is not an exhaustive list.
-
-### Honorable mentions
-
- * [trio-paho-mqtt](https://github.com/bkanuka/trio-paho-mqtt) - Trio-based. Wrapper around paho-mqtt.  
-   ![GitHub stars](https://img.shields.io/github/stars/bkanuka/trio-paho-mqtt)
-   ![license](https://img.shields.io/github/license/bkanuka/trio-paho-mqtt)
+- [paho-mqtt](https://github.com/eclipse/paho.mqtt.python) — Own protocol implementation. Synchronous.<br>![GitHub stars](https://img.shields.io/github/stars/eclipse/paho.mqtt.python) ![license](https://img.shields.io/github/license/eclipse/paho.mqtt.python)
+- [gmqtt](https://github.com/wialon/gmqtt) — Own protocol implementation. Asynchronous.<br>![GitHub stars](https://img.shields.io/github/stars/wialon/gmqtt) ![license](https://img.shields.io/github/license/wialon/gmqtt)
+- [fastapi-mqtt](https://github.com/sabuhish/fastapi-mqtt) — Asynchronous wrapper around gmqtt. Simplifies integration in your FastAPI application.<br>![GitHub stars](https://img.shields.io/github/stars/sabuhish/fastapi-mqtt) ![license](https://img.shields.io/github/license/sabuhish/fastapi-mqtt)
+- [amqtt](https://github.com/Yakifo/amqtt) — Own protocol implementation. Asynchronous. Includes a broker.<br>![GitHub stars](https://img.shields.io/github/stars/Yakifo/amqtt) ![license](https://img.shields.io/github/license/Yakifo/amqtt)
+- [mqttools](https://github.com/eerimoq/mqttools) — Own protocol implementation. Asynchronous.<br>![GitHub stars](https://img.shields.io/github/stars/eerimoq/mqttools) ![license](https://img.shields.io/github/license/eerimoq/mqttools)
+- [trio-paho-mqtt](https://github.com/bkanuka/trio-paho-mqtt) — Asynchronous wrapper around paho-mqtt (similar to asyncio-mqtt). Based on trio instead of asyncio.<br>![GitHub stars](https://img.shields.io/github/stars/bkanuka/trio-paho-mqtt) ![license](https://img.shields.io/github/license/bkanuka/trio-paho-mqtt)
 
 ## Requirements
 
-Python 3.7 or later.
-
-There is only a single dependency:
-
- * [paho-mqtt](https://github.com/eclipse/paho.mqtt.python)  
-   ![GitHub stars](https://img.shields.io/github/stars/eclipse/paho.mqtt.python) ![license](https://img.shields.io/github/license/eclipse/paho.mqtt.python)
+Python 3.7 or later. The only dependency is [paho-mqtt](https://github.com/eclipse/paho.mqtt.python).
 
 ## Note for Windows Users
 
 Since Python 3.8, the default asyncio event loop is the `ProactorEventLoop`. Said loop [doesn't support the `add_reader` method](https://docs.python.org/3/library/asyncio-platforms.html#windows) that is required by asyncio-mqtt. To use asyncio-mqtt, please switch to an event loop that supports the `add_reader` method such as the built-in `SelectorEventLoop`. E.g:
-```
+
+```python
 # Change to the "Selector" event loop
 asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 # Run your async application as usual
@@ -208,5 +266,6 @@ Expect API changes until we reach version `1.0.0`. After `1.0.0`, breaking chang
 ![license](https://img.shields.io/github/license/sbtinstruments/asyncio-mqtt)
 
 Note that the underlying paho-mqtt library is dual-licensed. One of the licenses is the so-called [Eclipse Distribution License v1.0](https://www.eclipse.org/org/documents/edl-v10.php). It is almost word-for-word identical to the [BSD 3-clause License](https://opensource.org/licenses/BSD-3-Clause). The only differences are:
- * One use of "COPYRIGHT OWNER" (EDL) instead of "COPYRIGHT HOLDER" (BSD)
- * One use of "Eclipse Foundation, Inc." (EDL) instead of "copyright holder" (BSD)
+
+- One use of "COPYRIGHT OWNER" (EDL) instead of "COPYRIGHT HOLDER" (BSD)
+- One use of "Eclipse Foundation, Inc." (EDL) instead of "copyright holder" (BSD)

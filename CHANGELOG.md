@@ -6,7 +6,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing so far.
+## [0.13.0]
+
+### Additions
+
+- Add `proxy` and `tls_params` examples to `README.md`. Contributed by [Muhammad Sohaib Arshid (@Sohaib90)](https://github.com/Sohaib90) in [#128](https://github.com/sbtinstruments/asyncio-mqtt/pull/128)
+- Add `proxy` option. Contributed by [Muhammad Sohaib Arshid (@Sohaib90)](https://github.com/Sohaib90) in [#127](https://github.com/sbtinstruments/asyncio-mqtt/pull/127)
+- Add `tls_params` option. Contributed by [Muhammad Sohaib Arshid (@Sohaib90)](https://github.com/Sohaib90) in [#126](https://github.com/sbtinstruments/asyncio-mqtt/pull/126)
+- Add WebSocket connection options. Contributed by [Dustin C. Hatch (@AdmiralNemo)](https://github.com/AdmiralNemo) in [#115](https://github.com/sbtinstruments/asyncio-mqtt/pull/115)
+- Add LICENSE to tarballs produced during build. Contributed by [Stewart Haines (@stewarthaines)](https://github.com/stewarthaines) in [#107](https://github.com/sbtinstruments/asyncio-mqtt/pull/107)
+
+### Changed
+
+- Rework type hints of the entire project to make it compliant with mypy in strict mode. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#133](https://github.com/sbtinstruments/asyncio-mqtt/pull/133)
+- Rework related projects in `README.md`. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#132](https://github.com/sbtinstruments/asyncio-mqtt/pull/132)
+- Increase LoC count from 600 to 700 in `README.md`.
+
+### Fixed
+
+- Fix autocomplete for `_outgoing_call` decorator. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#134](https://github.com/sbtinstruments/asyncio-mqtt/pull/134)
+- Fix missing ProtocolVersion import in `README.md` and format the entire `README.md`. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#130](https://github.com/sbtinstruments/asyncio-mqtt/pull/130)
+- Fix 'asyncio_mqtt' has no attribute 'TLSParameters' error. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#129](https://github.com/sbtinstruments/asyncio-mqtt/pull/129)
+- Fix formatting in `README.md`. Contributed by [Marcelo Trylesinski (@Kludex)](https://github.com/Kludex) in [#128](https://github.com/sbtinstruments/asyncio-mqtt/pull/128)
+- Fix race conditions that may cause `InvalidStateError`. Contributed by [Andreas Hangauer (@aha79)](https://github.com/aha79) in [#123](https://github.com/sbtinstruments/asyncio-mqtt/pull/123)
+- Fix thread safety in socket close callback. Contributed by [Dustin C. Hatch (@AdmiralNemo)](https://github.com/AdmiralNemo) in [#114](https://github.com/sbtinstruments/asyncio-mqtt/pull/114)
+
+## [0.12.1] - 2022-01-19
+
+### Fixed
+
+- Fix `TypeError` with the new `_outgoing_call` decorator.
+
+## [0.12.0] - 2022-01-19
+
+### Added
+
+- Add backpressure mechanism to limit the number of concurrent outgoing calls. Contributed by [Aaron Bach (@bachya)](https://github.com/bachya) in [#101](https://github.com/sbtinstruments/asyncio-mqtt/pull/101)
+
+## [0.11.1] - 2022-01-10
+
+### Fixed
+
+- Fix race condition in the "advanced example" in `README.md`. Contributed by [Steve Palmer (@steverpalmer)](https://github.com/steverpalmer) in [#93](https://github.com/sbtinstruments/asyncio-mqtt/pull/93)
+
+- Make `password` keyword argument optional (as it always should have been). Contributed by [@Shikoruma](https://github.com/Shikoruma) in [#89](https://github.com/sbtinstruments/asyncio-mqtt/pull/89)
+
+- Fix false postive type error from Pyright regarding `asynccontextmanager`. Contributed by [Shawn Wilsher (@sdwilsh)](https://github.com/sdwilsh) in [#87](https://github.com/sbtinstruments/asyncio-mqtt/pull/87)
+
+- Fix type hints (mostly related to async_generator). Contributed by [@laundmo](https://github.com/laundmo) in [#86](https://github.com/sbtinstruments/asyncio-mqtt/pull/86)
+
+## [0.11.0] - 2021-11-04
+
+### Added
+
+- Add link to PyPI package with a badge in `README.md`. Contributed by [Paul Barker (@pbrkr)](https://github.com/pbrkr) in [#72](https://github.com/sbtinstruments/asyncio-mqtt/pull/72)
+
+### Changed
+
+- Convert reason codes into English error messages. Contributed by [@CptSpaceToaster](https://github.cm/CptSpaceToaster) in [#74](https://github.com/sbtinstruments/asyncio-mqtt/pull/74)
+
+### Fixed
+
+- Fix event loop block caused by paho's reconnection feature. Contributed by [Martin Hjelmare (@MartinHjelmare)](https://github.cm/MartinHjelmare) in [#85](https://github.com/sbtinstruments/asyncio-mqtt/pull/85)
 
 ## [0.10.0] - 2021-07-13
 
