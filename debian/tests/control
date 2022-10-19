@@ -1,2 +1,3 @@
 Depends: python3-asyncio-mqtt
+Restrictions: superficial
 Test-Command: cd "$AUTOPKGTEST_TMP" ; python3 -c "import asyncio_mqtt; print(asyncio_mqtt.__version__)"
