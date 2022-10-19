@@ -3,7 +3,7 @@
 
 from typing import Any, Dict, Union
 
-import paho.mqtt.client as mqtt  # type: ignore
+import paho.mqtt.client as mqtt
 
 
 class MqttError(Exception):
@@ -13,13 +13,15 @@ class MqttError(Exception):
 
 
 class MqttCodeError(MqttError):
-    def __init__(self, rc: Union[int, mqtt.ReasonCodes], *args: Any):
+    def __init__(self, rc: Union[int, mqtt.ReasonCodes, None], *args: Any):
         super().__init__(*args)
         self.rc = rc
 
     def __str__(self) -> str:
         if isinstance(self.rc, mqtt.ReasonCodes):
             return f"[code:{self.rc.value}] {str(self.rc)}"
+        elif isinstance(self.rc, int):
+            return f"[code:{self.rc}] {mqtt.error_string(self.rc)}"
         else:
             return f"[code:{self.rc}] {super().__str__()}"
 
