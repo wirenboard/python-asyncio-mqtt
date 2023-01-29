@@ -5,3 +5,6 @@ dist
 local_test.py
 .venv
 .idea/
+.coverage
+coverage.xml
+asyncio_mqtt/_version.py

@@ -1,4 +1,5 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
@@ -6,9 +7,65 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.1]
+
+### Fixed
+
+- Add properties in Message, the last release skipped this commit. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse)
+
+## [0.16.0]
+
+### Added
+
+- Add properties in Message. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#166](https://github.com/sbtinstruments/asyncio-mqtt/pull/166)
+
+### Changed
+
+- Update Ruff and fix new lint errors. Contributed by [pre-commit-ci](https://github.com/apps/pre-commit-ci) and [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#161](https://github.com/sbtinstruments/asyncio-mqtt/pull/161)
+
+### Fixed
+
+- Fix typo in description metadata. Contributed by [(@pi-slh)](https://github.com/pi-slh) in [#162](https://github.com/sbtinstruments/asyncio-mqtt/pull/162)
+
+## [0.15.0]
+
+### Added
+
+- Allow multiple message generators at the same time. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#147](https://github.com/sbtinstruments/asyncio-mqtt/pull/147)
+
+### Changed
+
+- Simplify message filtering. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#147](https://github.com/sbtinstruments/asyncio-mqtt/pull/147)
+- Switch from `flake8` to `ruff` for linting. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#155](https://github.com/sbtinstruments/asyncio-mqtt/pull/155)
+
+## [0.14.0]
+
+### Added
+
+- Add [pre-commit](https://pre-commit.com/) for continuous integration. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#144](https://github.com/sbtinstruments/asyncio-mqtt/pull/144)
+- Add tests and coverage for continuous integration. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#145](https://github.com/sbtinstruments/asyncio-mqtt/pull/145) and [#149](https://github.com/sbtinstruments/asyncio-mqtt/pull/149)
+- Add continuous deployment to PyPI. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#151](https://github.com/sbtinstruments/asyncio-mqtt/pull/151)
+
+### Changed
+
+- Reorder `README.md` sections in order of importance. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#140](https://github.com/sbtinstruments/asyncio-mqtt/pull/140)
+- Change from `setup.py` to `pyproject.toml`. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#151](https://github.com/sbtinstruments/asyncio-mqtt/pull/151)
+
+### Deprecated
+
+- Deprecate `master` branch in favor of `main` branch.
+
+### Removed
+
+- Drop Python 3.6 support. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#146](https://github.com/sbtinstruments/asyncio-mqtt/pull/146)
+
+### Fixed
+
+- Fix lifespan example in `README.md`. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) and [Felix Böhm (@empicano)](https://github.com/empicano) in [#135](https://github.com/sbtinstruments/asyncio-mqtt/pull/135)
+
 ## [0.13.0]
 
-### Additions
+### Added
 
 - Add `proxy` and `tls_params` examples to `README.md`. Contributed by [Muhammad Sohaib Arshid (@Sohaib90)](https://github.com/Sohaib90) in [#128](https://github.com/sbtinstruments/asyncio-mqtt/pull/128)
 - Add `proxy` option. Contributed by [Muhammad Sohaib Arshid (@Sohaib90)](https://github.com/Sohaib90) in [#127](https://github.com/sbtinstruments/asyncio-mqtt/pull/127)
@@ -112,7 +169,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix `TypeError` on invalid username and password combination
 
-- Check that _misc_task is not None before trying to cancel it. Contributed by [Ellis Percival (@flyte)](https://github.com/flyte) in [#41](https://github.com/sbtinstruments/asyncio-mqtt/pull/41)
+- Check that \_misc_task is not None before trying to cancel it. Contributed by [Ellis Percival (@flyte)](https://github.com/flyte) in [#41](https://github.com/sbtinstruments/asyncio-mqtt/pull/41)
 
 - Fix exception in `on_socket_open`: Non-thread-safe operation invoked on an event loop other than the current one. Contributed by [Ellis Percival (@flyte)](https://github.com/flyte) in [#40](https://github.com/sbtinstruments/asyncio-mqtt/pull/40)
 
@@ -136,11 +193,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `transport` argument to `Client` 
+- Add `transport` argument to `Client`
   Contributed by [@opengs](https://github.com/opengs) in [#21](https://github.com/sbtinstruments/asyncio-mqtt/pull/21)
-- Add `clean_session` argument to `Client` 
+- Add `clean_session` argument to `Client`
   Contributed by [@nadyka](https://github.com/madnadyka) in [#17](https://github.com/sbtinstruments/asyncio-mqtt/pull/17)
-
 
 ## [0.7.0] - 2020-08-04
 
@@ -150,13 +206,15 @@ in this release. We are approaching a 1.0.0 release. Let me know
 if you want something changed before that via the issue tracker on GitHub.
 
 ### Added
+
 - Add support for MQTTv5.
 - Add `will` keyword argument to `Client`.
 - Add `MqttConnectError` with specific error messages for connection failures.
-- Add `Client.id` property that returns the client ID (or `None` if 
+- Add `Client.id` property that returns the client ID (or `None` if
   the client ID was not specified during construction).
 
 ### Fixed
+
 - Fix unhandled exception error.
 - Fix "Task was destroyed but it is pending" error.
 - Fix compatibility with `asyncqt`'s event loop.
@@ -166,13 +224,17 @@ if you want something changed before that via the issue tracker on GitHub.
   Contributed by [Derrick Lyndon Pallas (@pallas)](https://github.com/pallas) in [#12](https://github.com/sbtinstruments/asyncio-mqtt/pull/12)
 
 ## [0.6.0] - 2020-06-26
+
 ### Changed
+
 - No longer logs exception in `Client.__aexit__`. It's perfectly valid
   to exit due to, e.g., `asyncio.CancelledError` so let's not treat it as an
   error.
 
 ## [0.5.0] - 2020-06-08
+
 ### Added
+
 - Add support for python 3.6.
   Contributed by [Derrick Lyndon Pallas (@pallas)](https://github.com/pallas) in [#7](https://github.com/sbtinstruments/asyncio-mqtt/pull/7) (1/2).
 - Add `client_id` and `tls_context` keyword arguments to the `Client` constructor.
@@ -180,10 +242,13 @@ if you want something changed before that via the issue tracker on GitHub.
 - Add `timeout` keyword argument to both `Client.connect` and `Client.disconnect`. Default value of `10` seconds (like the other functions).
 
 ### Changed
+
 - Propagate disconnection errors to subscribers. This enables user code to detect if a disconnect occurs. E.g., due to network errors.
 
 ## [0.4.0] - 2020-05-06
+
 ### Changed
+
 - **BREAKING CHANGE:** Forward the [MQTTMessage](https://github.com/eclipse/paho.mqtt.python/blob/1eec03edf39128e461e6729694cf5d7c1959e5e4/src/paho/mqtt/client.py#L355)
   class from paho-mqtt instead of just the `payload`. This applies to both
   `Client.filtered_messages` and `Client.unfiltered_messages`.
@@ -193,42 +258,57 @@ if you want something changed before that via the issue tracker on GitHub.
   Contributed by [Matthew Bradbury (@MBradbury)](https://github.com/MBradbury) in [#3](https://github.com/sbtinstruments/asyncio-mqtt/pull/3).
 
 ## [0.3.0] - 2020-04-13
+
 ### Added
+
 - Add `username` and `password` keyword arguments to the `Client` constructor.
   Contributed by [@gluap](https://github.com/gluap) in [#1](https://github.com/sbtinstruments/asyncio-mqtt/pull/1).
 
 ### Fixed
+
 - Fix log message context for `Client.filtered_messages`.
 
 ## [0.2.1] - 2020-04-07
+
 ### Fixed
+
 - Fix regression with the `Client._wait_for` helper method introduced in the latest
   release.
 
 ## [0.2.0] - 2020-04-07
+
 ### Changed
+
 - **BREAKING CHANGE:** Replace all uses of `asyncio.TimeoutError` with `MqttError`.
-  
+
   Calls to `Client.subscribe`/`unsubscribe`/`publish` will no longer raise `asyncio.TimeoutError.`
-    
+
   The new behaviour makes it easier to reason about, which exceptions the library
   throws:
+
   - Wrong input parameters? Raise `ValueError`.
   - Network or protocol failures? `MqttError`.
   - Broken library state? `RuntimeError`.
 
 ## [0.1.3] - 2020-04-07
+
 ### Fixed
+
 - Fix how keyword arguments are forwarded in `Client.publish` and `Client.subscribe`.
 
 ## [0.1.2] - 2020-04-06
+
 ### Fixed
+
 - Remove log call that was erroneously put in while debugging the latest release.
 
 ## [0.1.1] - 2020-04-06
+
 ### Fixed
+
 - Add missing parameters to `Client.publish`.
 - Fix error in `Client.publish` when paho-mqtt publishes immediately.
 
 ## [0.1.0] - 2020-04-06
+
 Initial release.
