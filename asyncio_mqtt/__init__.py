@@ -1,14 +1,32 @@
 # SPDX-License-Identifier: BSD-3-Clause
-from .client import Client, ProtocolVersion, TLSParameters, Will
+from ._version import __version__, __version_tuple__
+from .client import (
+    Client,
+    Message,
+    ProtocolVersion,
+    ProxySettings,
+    TLSParameters,
+    Topic,
+    TopicLike,
+    Wildcard,
+    WildcardLike,
+    Will,
+)
 from .error import MqttCodeError, MqttError
-from .version import __version__
 
 __all__ = [
-    "MqttError",
-    "MqttCodeError",
-    "Client",
-    "Will",
-    "ProtocolVersion",
-    "TLSParameters",
     "__version__",
+    "__version_tuple__",
+    "Client",
+    "Message",
+    "ProtocolVersion",
+    "ProxySettings",
+    "TLSParameters",
+    "Topic",
+    "TopicLike",
+    "Wildcard",
+    "WildcardLike",
+    "Will",
+    "MqttCodeError",
+    "MqttError",
 ]
