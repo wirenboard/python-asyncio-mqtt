@@ -1,3 +1,12 @@
+python-asyncio-mqtt (0.16.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * Build-Depend on latest python3-paho-mqtt (Closes: #1025175)
+  * Disable unittests, which need network access
+  * Run unittests as autopkgtest
+
+ -- Martin <debacle@debian.org>  Mon, 30 Jan 2023 23:39:32 +0000
+
 python-asyncio-mqtt (0.13.0-1) unstable; urgency=medium
 
   * New upstream release
