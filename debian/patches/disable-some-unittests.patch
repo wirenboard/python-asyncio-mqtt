@@ -1,0 +1,111 @@
+Description: disable some unittests, which need network access
+Author: Martin <debacle@debian.org>
+Origin: vendor
+Last-Update: 2023-01-30
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/tests/test_client.py
++++ b/tests/test_client.py
+@@ -82,6 +82,7 @@
+     assert not topic.matches("$test/group/a/b/c")
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_multiple_messages_generators() -> None:
+     """Test that multiple Client.messages() generators can be used at the same time."""
+     topic = TOPIC_HEADER + "multiple_messages_generators"
+@@ -101,6 +102,7 @@
+             await client.publish(topic)
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_client_filtered_messages() -> None:
+     topic_header = TOPIC_HEADER + "filtered_messages/"
+     good_topic = topic_header + "good"
+@@ -121,6 +123,7 @@
+             await client.publish(good_topic, 2)
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_client_unfiltered_messages() -> None:
+     topic_header = TOPIC_HEADER + "unfiltered_messages/"
+     topic_filtered = topic_header + "filtered"
+@@ -147,6 +150,7 @@
+             await client.publish(topic_unfiltered, 2)
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_client_unsubscribe() -> None:
+     topic_header = TOPIC_HEADER + "unsubscribe/"
+     topic1 = topic_header + "1"
+@@ -184,6 +188,7 @@
+     assert len(client.id) == length
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_client_will() -> None:
+     topic = TOPIC_HEADER + "will"
+     event = anyio.Event()
+@@ -205,6 +210,7 @@
+             client._client._sock_close()  # type: ignore[attr-defined]
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_client_tls_context() -> None:
+     topic = TOPIC_HEADER + "tls_context"
+ 
+@@ -226,6 +232,7 @@
+             await client.publish(topic)
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_client_tls_params() -> None:
+     topic = TOPIC_HEADER + "tls_params"
+ 
+@@ -249,6 +256,7 @@
+             await client.publish(topic)
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_client_username_password() -> None:
+     topic = TOPIC_HEADER + "username_password"
+ 
+@@ -268,12 +276,14 @@
+             await client.publish(topic)
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_client_logger() -> None:
+     logger = logging.getLogger("asyncio-mqtt")
+     async with Client(HOSTNAME, logger=logger) as client:
+         assert logger is client._client._logger  # type: ignore[attr-defined]
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_client_max_concurrent_outgoing_calls(
+     monkeypatch: pytest.MonkeyPatch,
+ ) -> None:
+@@ -321,6 +331,7 @@
+         await client.publish(topic)
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_client_websockets() -> None:
+     topic = TOPIC_HEADER + "websockets"
+ 
+@@ -344,6 +355,7 @@
+             await client.publish(topic)
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_client_pending_calls_threshold(caplog: pytest.LogCaptureFixture) -> None:
+     topic = TOPIC_HEADER + "pending_calls_threshold"
+ 
+@@ -363,6 +375,7 @@
+         ]
+ 
+ 
++@pytest.mark.skip(reason="needs network access")
+ async def test_client_no_pending_calls_warnings_with_max_concurrent_outgoing_calls(
+     caplog: pytest.LogCaptureFixture,
+ ) -> None:
