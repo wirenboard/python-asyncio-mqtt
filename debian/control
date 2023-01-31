@@ -5,8 +5,11 @@ Maintainer: Debian Python Team <team+python@tracker.debian.org>
 Uploaders: Martin <debacle@debian.org>
 Build-Depends: debhelper-compat (= 13),
 	dh-python,
+	pybuild-plugin-pyproject,
 	python3,
-	python3-paho-mqtt,
+	python3-anyio,
+	python3-paho-mqtt (>= 1.6.1~),
+	python3-pytest,
 	python3-setuptools,
 Standards-Version: 4.6.1
 Rules-Requires-Root: no
