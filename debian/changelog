@@ -1,3 +1,9 @@
+python-asyncio-mqtt (0.16.1-2) unstable; urgency=medium
+
+  * Add builddeps to autopkgtest depends
+
+ -- Martin <debacle@debian.org>  Tue, 31 Jan 2023 18:32:59 +0000
+
 python-asyncio-mqtt (0.16.1-1) unstable; urgency=medium
 
   * New upstream release
