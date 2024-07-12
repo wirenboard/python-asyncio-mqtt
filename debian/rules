@@ -2,11 +2,8 @@
 
 export PYBUILD_NAME=asyncio_mqtt
 
-include /usr/share/dpkg/pkg-info.mk
-
 %:
-	dh $@ --buildsystem=pybuild --with python3
+	dh $@ --buildsystem=pybuild --with python3,sphinxdoc
 
-#execute_before_dh_auto_build:
-#	echo "__version__ = version = '$(DEB_VERSION_UPSTREAM)'" > asyncio_mqtt/_version.py
-#	echo "__version_tuple__ = version_tuple = tuple('$(DEB_VERSION_UPSTREAM)'.split('.'))" >> asyncio_mqtt/_version.py
+execute_after_dh_auto_build:
+	sphinx-build docs/ docs/_build/html/

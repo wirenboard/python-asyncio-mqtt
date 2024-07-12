@@ -5,13 +5,17 @@ Maintainer: Debian Python Team <team+python@tracker.debian.org>
 Uploaders: Martin <debacle@debian.org>
 Build-Depends: debhelper-compat (= 13),
 	dh-python,
+	furo,
 	pybuild-plugin-pyproject,
 	python3,
 	python3-anyio,
+	python3-myst-parser,
 	python3-paho-mqtt (>= 1.6.1~),
 	python3-pytest,
 	python3-setuptools,
-	python3-setuptools-scm
+	python3-setuptools-scm,
+	python3-sphinx,
+	python3-sphinx-copybutton,
 Standards-Version: 4.6.1
 Rules-Requires-Root: no
 Vcs-Git: https://salsa.debian.org/python-team/packages/python-asyncio-mqtt.git
@@ -28,3 +32,15 @@ Description: Idomatic asyncio wrapper around paho-mqtt
  library with a modern, asyncio-based interface.
  .
  Expect API changes below version 1.0.0.
+
+Package: python-asyncio-mqtt-doc
+Section: doc
+Architecture: all
+Depends: ${misc:Depends},
+         ${sphinxdoc:Depends}
+Multi-Arch: foreign
+Description: Idomatic asyncio wrapper around paho-mqtt (documentation)
+ asyncio-mqtt combines the stability of the time-proven paho-mqtt
+ library with a modern, asyncio-based interface.
+ .
+ This package provides the HTML documentation.
