@@ -2,10 +2,116 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.2.0] - 2024-07-02
+
+### Changed
+
+- Bump paho-mqtt to 2.1 (@empicano in #305)
+- Migrate to paho-mqtt callback v2 (@empicano in #313)
+
+### Fixed
+
+- Fix `Client.messages` not being reusable (@ryan-summers in #312)
+
+## [2.1.0] - 2024-04-24
+
+### Changed
+
+- Migrate to paho-mqtt 2.0 (@JonathanPlasse in #286)
+
+## [2.0.1] - 2024-03-13
+
+## Fixed
+
+- Configure `poetry-dynamic-versioning` to replace `__version__` and `__version_tuple__` variables (@vvanglro in #273)
+- Reset internal state when connection attempt in `__aenter__` times out (@empicano in #285)
+
+## [2.0.0] - 2024-01-15
+
+### Added
+
+- Test for Python 3.12 (@JonathanPlasse in #256)
+- Add migration guide (@empicano in #262)
+
+### Changed
+
+- Switch to client-wide queue (@empicano in #262)
+- Switch from black to Ruff and update dev dependencies (@JonathanPlasse in #255)
+- Rename `Client.id` attribute to `identifier` (@empicano in #262)
+
+### Removed
+
+- Remove deprecated `connect`/`disconnect` methods (@empicano in #262)
+- Remove deprecated `filtered_messages` and `unfiltered_messages` methods (@empicano in #262)
+- Remove deprecated `message_retry_set` client argument (@empicano in #262)
+
+### Fixed
+
+- Release reusability correctly to allow consecutive calls to `__aexit__` (@spacemanspiff2007 in #263)
+
+## [1.2.1] - 2023-09-19
+
+### Changed
+
+- Deprecate `connect` and `disconnect` in favor of direct calls to `__aenter__` and `__aexit__`. (@empicano in #247)
+
+### Fixed
+
+- Release lock in `__aexit__` only if acquired (@spacemanspiff2007 in #249)
+
+## [1.2.0] - 2023-09-03
+
+### Changed
+
+- Drop support for Python 3.7. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#246](https://github.com/sbtinstruments/aiomqtt/pull/246)
+
+### Fixed
+
+- Fix `__aenter__` failing to release lock when initial connection fails. Contributed by [Peanut (@vvanglro)](https://github.com/vvanglro) in [#245](https://github.com/sbtinstruments/aiomqtt/pull/245)
+
+## [1.1.0] - 2023-08-03
+
+### Added
+
+- Expose paho's `tls_insecure` argument. Contributed by [Bob Steers (@steersbob)](https://github.com/steersbob) in [#234](https://github.com/sbtinstruments/asyncio-mqtt/pull/234)
+- Add reference section generated from docstrings to documentation. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#231](https://github.com/sbtinstruments/asyncio-mqtt/pull/231)
+
+### Fixed
+
+- Don't suppress exceptions in the client's `__aexit__`. Contributed by [Robert Resch (@edenhaus)](https://github.com/edenhaus) in [#232](https://github.com/sbtinstruments/aiomqtt/pull/232)
+- Match `topic/subtopic` with `topic/subtopic/#` wildcard according to MQTT documentation. Contributed by [Bob Steers (@steersbob)](https://github.com/steersbob) in [#241](https://github.com/sbtinstruments/asyncio-mqtt/pull/241)
+
+## [1.0.0] - 2023-06-16
+
+### Added
+
+- Move documentation from `README` to Sphinx. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#159](https://github.com/sbtinstruments/asyncio-mqtt/pull/159)
+- Add CI workflow to deploy documentation to GitHub Pages. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#159](https://github.com/sbtinstruments/asyncio-mqtt/pull/159)
+- Add Flow Control options to the Client-Constructor. Contributed by [Andreas Heine (@andreasheine)](https://github.com/andreasheine) in [#180](https://github.com/sbtinstruments/asyncio-mqtt/pull/180)
+- Make `Client.pending_calls_threshold` public. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#185](https://github.com/sbtinstruments/asyncio-mqtt/pull/185)
+- Make Client a reusable (but not reentrant) context manager. Contributed by [Peanut (@vvanglro)](https://github.com/vvanglro) in [#216](https://github.com/sbtinstruments/asyncio-mqtt/pull/216)
+- Make default timeout configurable. Contributed by [Scott P. (@skewty)](https://github.com/skewty) in [#192](https://github.com/sbtinstruments/asyncio-mqtt/pull/192)
+
+### Changed
+
+- Switch from pip to poetry for dependency management. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#210](https://github.com/sbtinstruments/asyncio-mqtt/pull/210)
+- Rename project from asyncio-mqtt to aiomqtt. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#210](https://github.com/sbtinstruments/asyncio-mqtt/pull/210)
+
+### Removed
+
+- Rename `master` branch to `main`. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse)
+
+### Fixed
+
+- Consistently use a user-provided logger. Contributed by [Roman Novatorov (@rnovatorov)](https://github.com/rnovatorov) in [#176](https://github.com/sbtinstruments/asyncio-mqtt/pull/176)
+
+## [0.17.0] - 2023-06-12
+
+Yanked. We recently renamed the project from asyncio-mqtt to aiomqtt. Problem is that the _old_ aiomqtt (by mossblaser) was still in use. These users suddenly experienced a breaking change when they updated from v0.1.2 to v0.17.0. Our mitigation is to yank v0.17.0 and release a v1.0.0 in it's place. It was about time for a v1.0.0 release anyhow!
 
 ## [0.16.1]
 
@@ -22,6 +128,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update Ruff and fix new lint errors. Contributed by [pre-commit-ci](https://github.com/apps/pre-commit-ci) and [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#161](https://github.com/sbtinstruments/asyncio-mqtt/pull/161)
+- Update tooling. Contributed by [pre-commit-ci](https://github.com/apps/pre-commit-ci) and [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#184](https://github.com/sbtinstruments/asyncio-mqtt/pull/184)
 
 ### Fixed
 
@@ -50,10 +157,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reorder `README.md` sections in order of importance. Contributed by [Felix Böhm (@empicano)](https://github.com/empicano) in [#140](https://github.com/sbtinstruments/asyncio-mqtt/pull/140)
 - Change from `setup.py` to `pyproject.toml`. Contributed by [Jonathan Plasse (@JonathanPlasse)](https://github.com/JonathanPlasse) in [#151](https://github.com/sbtinstruments/asyncio-mqtt/pull/151)
-
-### Deprecated
-
-- Deprecate `master` branch in favor of `main` branch.
 
 ### Removed
 
