@@ -10,7 +10,9 @@ Build-Depends: debhelper-compat (= 13),
 	python3,
 	python3-anyio,
 	python3-myst-parser,
-	python3-paho-mqtt (>= 1.6.1~),
+	python3-paho-mqtt (>= 2~),
+	python3-poetry-core,
+	python3-poetry-dynamic-versioning,
 	python3-pytest,
 	python3-setuptools,
 	python3-setuptools-scm,
@@ -30,8 +32,6 @@ Provides: ${python3:Provides}
 Description: Idomatic asyncio wrapper around paho-mqtt
  asyncio-mqtt combines the stability of the time-proven paho-mqtt
  library with a modern, asyncio-based interface.
- .
- Expect API changes below version 1.0.0.
 
 Package: python-asyncio-mqtt-doc
 Section: doc
