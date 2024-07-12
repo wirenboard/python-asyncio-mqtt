@@ -1,87 +1,27 @@
-# Contributing
+# How to contribute
 
-## Setting up an environment
+We're very happy about contributions to aiomqtt! 🎉
 
-Clone the `asyncio-mqtt`.
+## Development setup
 
-Inside the repository, create a virtual environment.
+- Clone the aiomqtt repository
+- Install the Python version noted in `.python-version` via `pyenv`
+- Install poetry; Then run `./scripts/setup` to install the dependencies and aiomqtt itself
+- Run ruff and mypy with `./scripts/check`
+- Run the tests with `./scripts/test`
 
-```bash
-python3 -m venv .venv
-```
+During development, it's often useful to have a local MQTT broker running. You can spin up a local mosquitto broker with Docker via `./scripts/develop`. You can connect to this broker with `aiomqtt.Client("localhost", port=1883)`.
 
-Activate the virtual environment.
+## The documentation
 
-```bash
-source ./env/bin/activate
-```
+The documentation uses [Sphinx](https://www.sphinx-doc.org/en/master/). You can build it with `./scripts/docs --reload`.
 
-Upgrade `pip`.
+The Markdown source files are located in the `docs` folder. The reference section is mostly generated from the docstrings in the source code. The docstrings are formatted according to the [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings).
 
-```bash
-pip install --upgrade pip
-```
+## Making a pull request
 
-Install the development dependencies.
-
-```bash
-pip install -e .[tests,lint,format]
-```
-
-Install [pre-commit](https://pre-commit.com/) so that your code is formatted and checked when you are doing a commit.
-
-```bash
-pip install pre-commit
-pre-commit install
-```
+Please check if your changes call for updates to the documentation and don't forget to add your name and contribution to the `CHANGELOG.md`! You can create a draft pull request if your contribution is not yet ready to merge.
 
 ### Visual Studio Code
 
-If you are using VSCode, here are the settings to activate on save,
-
-- `black` to format.
-- `mypy` to lint.
-- Install [charliermarsh.ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) extension to lint, sort imports, and auto-fix lint errors (`ruff` is a fast equivalent to `flake8`)
-
-```json
-{
-  "[python]": {
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true
-    }
-  },
-  "python.formatting.provider": "black",
-  "python.linting.mypyEnabled": true
-}
-```
-
-## Testing
-
-To test the code use [pytest](https://docs.pytest.org/en/7.1.x/).
-
-```bash
-pytest
-```
-
-To do the full coverage of `asyncio-mqtt`, run the following command.
-
-```bash
-pytest --cov=src --cov=tests --cov-report=html
-```
-
-To view the coverage open `htmlcov/index.html`.
-
-## Committing
-
-After doing `git commit`, `pre-commit` will check the committed code.
-The check can be passed, skipped or failed.
-If the check failed, it is possible it auto-fixed the code, so you will only need to stage and commit again for it to pass.
-If it did not auto-fixed the code, you will need to do it manually.
-`pre-commit` will only check the code that is staged, the unstaged code will be stashed during the checks.
-
-## Making a Pull Request
-
-The branch to contribute is `master`.
-You should create a draft pull request if you still need to work on it.
-You should update `CHANGELOG.md` to reflect the change done in your pull request.
+You can find workspace settings and recommended extensions in the `.vscode` folder.
