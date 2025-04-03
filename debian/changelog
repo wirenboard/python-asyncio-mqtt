@@ -1,3 +1,9 @@
+python-asyncio-mqtt (2.3.1-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Martin <debacle@debian.org>  Thu, 03 Apr 2025 23:16:25 +0000
+
 python-asyncio-mqtt (2.2.0-2) unstable; urgency=medium
 
   * Source-only upload
