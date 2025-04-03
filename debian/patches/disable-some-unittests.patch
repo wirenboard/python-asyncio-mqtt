@@ -6,7 +6,7 @@ Last-Update: 2024-07-11
 This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 --- a/tests/test_client.py
 +++ b/tests/test_client.py
-@@ -33,7 +33,7 @@
+@@ -35,7 +35,7 @@
  TOPIC_PREFIX = OS_PY_VERSION + "/tests/aiomqtt/"
  
  
@@ -15,7 +15,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_client_unsubscribe() -> None:
      """Test that messages are no longer received after unsubscribing from a topic."""
      topic_1 = TOPIC_PREFIX + "test_client_unsubscribe/1"
-@@ -70,7 +70,7 @@
+@@ -72,7 +72,7 @@
      assert len(client.identifier) == length
  
  
@@ -24,7 +24,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_client_will() -> None:
      topic = TOPIC_PREFIX + "test_client_will"
      event = anyio.Event()
-@@ -91,7 +91,7 @@
+@@ -93,7 +93,7 @@
              client._client._sock_close()
  
  
@@ -33,7 +33,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_client_tls_context() -> None:
      topic = TOPIC_PREFIX + "test_client_tls_context"
  
-@@ -111,7 +111,7 @@
+@@ -113,7 +113,7 @@
          await client.publish(topic)
  
  
@@ -42,7 +42,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_client_tls_params() -> None:
      topic = TOPIC_PREFIX + "tls_params"
  
-@@ -133,7 +133,7 @@
+@@ -135,7 +135,7 @@
          await client.publish(topic)
  
  
@@ -51,7 +51,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_client_username_password() -> None:
      topic = TOPIC_PREFIX + "username_password"
  
-@@ -151,14 +151,14 @@
+@@ -153,14 +153,14 @@
          await client.publish(topic)
  
  
@@ -68,7 +68,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_client_max_concurrent_outgoing_calls(
      monkeypatch: pytest.MonkeyPatch,
  ) -> None:
-@@ -207,7 +207,7 @@
+@@ -209,7 +209,7 @@
          await client.publish(topic)
  
  
@@ -77,7 +77,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_client_websockets() -> None:
      topic = TOPIC_PREFIX + "websockets"
  
-@@ -230,7 +230,7 @@
+@@ -232,7 +232,7 @@
              await client.publish(topic)
  
  
@@ -86,7 +86,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  @pytest.mark.parametrize("pending_calls_threshold", [10, 20])
  async def test_client_pending_calls_threshold(
      pending_calls_threshold: int, caplog: pytest.LogCaptureFixture
-@@ -254,7 +254,7 @@
+@@ -256,7 +256,7 @@
          ]
  
  
@@ -95,7 +95,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  @pytest.mark.parametrize("pending_calls_threshold", [10, 20])
  async def test_client_no_pending_calls_warnings_with_max_concurrent_outgoing_calls(
      pending_calls_threshold: int,
-@@ -275,7 +275,7 @@
+@@ -277,7 +277,7 @@
          assert caplog.record_tuples == []
  
  
@@ -104,7 +104,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_client_context_is_reusable() -> None:
      """Test that a client context manager instance is reusable."""
      topic = TOPIC_PREFIX + "test_client_is_reusable"
-@@ -286,7 +286,7 @@
+@@ -288,7 +288,7 @@
          await client.publish(topic, "bar")
  
  
@@ -113,7 +113,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_client_context_is_not_reentrant() -> None:
      """Test that a client context manager instance is not reentrant."""
      client = Client(HOSTNAME)
-@@ -296,7 +296,7 @@
+@@ -298,7 +298,7 @@
                  pass
  
  
@@ -122,7 +122,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_client_reusable_message() -> None:
      custom_client = Client(HOSTNAME)
      publish_client = Client(HOSTNAME)
-@@ -331,7 +331,7 @@
+@@ -333,7 +333,7 @@
              tg.start_soon(task_a_publisher)
  
  
@@ -131,7 +131,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_aenter_state_reset_connect_failure() -> None:
      """Test that internal state is reset on CONNECT failure in ``aenter``."""
      client = Client(hostname="invalid")
-@@ -341,7 +341,7 @@
+@@ -343,7 +343,7 @@
      assert not client._connected.done()
  
  
@@ -140,7 +140,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_aenter_state_reset_connack_timeout() -> None:
      """Test that internal state is reset on CONNACK timeout in ``aenter``."""
      client = Client(HOSTNAME, timeout=0)
-@@ -351,7 +351,7 @@
+@@ -353,7 +353,7 @@
      assert not client._connected.done()
  
  
@@ -149,7 +149,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_aenter_state_reset_connack_negative() -> None:
      """Test that internal state is reset on negative CONNACK in ``aenter``."""
      client = Client(HOSTNAME, username="invalid")
-@@ -361,28 +361,28 @@
+@@ -363,28 +363,28 @@
      assert not client._connected.done()
  
  
@@ -182,7 +182,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_aexit_client_is_already_disconnected_failure() -> None:
      """Test that ``aexit`` reraises if client is already disconnected with an error."""
      client = Client(HOSTNAME)
-@@ -392,7 +392,7 @@
+@@ -394,7 +394,7 @@
          await client.__aexit__(None, None, None)
  
  
@@ -191,7 +191,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  async def test_messages_view_is_reusable() -> None:
      """Test that ``.messages`` is reusable after dis- and reconnection."""
      topic = TOPIC_PREFIX + "test_messages_generator_is_reusable"
-@@ -410,7 +410,7 @@
+@@ -412,7 +412,7 @@
          assert message.payload == b"foo"
  
  
@@ -199,4 +199,13 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 +@pytest.mark.skip(reason="needs network access")
  async def test_messages_view_multiple_tasks_concurrently() -> None:
      """Test that ``.messages`` can be used concurrently by multiple tasks."""
-     topic = TOPIC_PREFIX + "test_messages_generator_is_reentrant"
+     topic = TOPIC_PREFIX + "test_messages_view_multiple_tasks_concurrently"
+@@ -430,7 +430,7 @@
+         await client.publish(topic, "bar")
+ 
+ 
+-@pytest.mark.network
++@pytest.mark.skip(reason="needs network access")
+ async def test_messages_view_len() -> None:
+     """Test that the ``__len__`` method of the messages view works correctly."""
+     topic = TOPIC_PREFIX + "test_messages_view_len"
