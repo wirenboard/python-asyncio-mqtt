@@ -1,53 +1,55 @@
-[tool.poetry]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
 name = "aiomqtt"
-version = "0.0.0"  # Placeholder: Managed by poetry-dynamic-versioning
-description = "The idiomatic asyncio MQTT client, wrapped around paho-mqtt"
-license = "BSD-3-Clause"
-authors = ["Frederik Aalund <fpa@sbtinstruments.com>", "Felix Böhm <felix@felixboehm.dev>", "Jonathan Plasse <jonathan.plasse@live.fr>"]
+version = "2.3.1"
+description = "The idiomatic asyncio MQTT client"
+authors = [
+    { name = "Frederik Aalund", email = "fpa@sbtinstruments.com" },
+    { name = "Felix Böhm", email = "f@bo3hm.com" },
+    { name = "Jonathan Plasse", email = "jonathan.plasse@live.fr" },
+]
 readme = "README.md"
-packages = [{include = "aiomqtt"}]
-repository = "https://github.com/sbtinstruments/aiomqtt"
-documentation = "https://sbtinstruments.github.io/aiomqtt"
-keywords = ["mqtt", "iot", "internet-of-things", "asyncio", "paho-mqtt", "mqttv5"]
+keywords = [
+    "mqtt",
+    "iot",
+    "internet-of-things",
+    "asyncio",
+    "paho-mqtt",
+    "mqttv5",
+]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
+    "License :: OSI Approved :: BSD License",
+]
+requires-python = ">=3.8,<4.0"
+dependencies = [
+    "paho-mqtt>=2.1.0,<3.0.0",
+    "typing-extensions>=4.4.0,<5.0.0; python_version < \"3.10\"",
 ]
 
-[tool.poetry.urls]
-"Issue tracker" = "https://github.com/sbtinstruments/aiomqtt/issues"
+[project.urls]
+source = "https://github.com/empicano/aiomqtt"
+documentation = "https://aiomqtt.bo3hm.com"
+issues = "https://github.com/empicano/aiomqtt/issues"
 
-[tool.poetry.dependencies]
-python = "^3.8"
-paho-mqtt = "^2.1.0"
-typing-extensions = {version = "^4.4.0", markers = "python_version < '3.10'"}
-
-[tool.poetry.group.dev]
-optional = true
-
-[tool.poetry.group.dev.dependencies]
-mypy = "^1.10.0"
-ruff = "^0.4.8"
-pytest = "^7.3.1"
-pytest-cov = "^4.0.0"
-anyio = "^3.6.2"
-furo = "^2023.3.27"
-sphinx-autobuild = "^2021.3.14"
-myst-parser = "^1.0.0"
-sphinx-copybutton = "^0.5.2"
-sphinx = "^5.3"
-
-[tool.poetry-dynamic-versioning]
-enable = true
-vcs = "git"
-style = "pep440"
-strict = true
-metadata = false
-
-[build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0"]
-build-backend = "poetry_dynamic_versioning.backend"
+[dependency-groups]
+dev = [
+    "mypy>=1.10.0,<2.0.0",
+    "ruff>=0.4.8,<0.5.0",
+    "pytest>=7.3.1,<8.0.0",
+    "pytest-cov>=4.0.0,<5.0.0",
+    "anyio>=3.6.2,<4.0.0",
+    "furo>=2023.3.27,<2024.0.0",
+    "sphinx-autobuild>=2021.3.14,<2022.0.0",
+    "myst-parser>=1.0.0,<2.0.0",
+    "sphinx-copybutton>=0.5.2,<0.6.0",
+    "sphinx>=5.3,<6.0",
+]
 
 [tool.ruff]
 target-version = "py38"
@@ -138,12 +140,8 @@ pretty = true
 filterwarnings = [
     "error",
     "ignore:ssl.PROTOCOL_TLS is deprecated:DeprecationWarning",
-    # TODO(jonathan): Remove these once we finish the migration to the new API
-    "ignore:Callback API version 1 is deprecated, update to latest version:DeprecationWarning",
 ]
-markers = [
-    "network: tests that requires network access"
-]
+markers = ["network: tests that requires network access"]
 xfail_strict = true
 
 [tool.coverage.run] # https://coverage.readthedocs.io/en/latest/config.html#run

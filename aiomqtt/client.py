@@ -14,7 +14,7 @@ import sys
 from types import TracebackType
 from typing import (
     Any,
-    AsyncGenerator,
+    AsyncIterator,
     Awaitable,
     Callable,
     Coroutine,
@@ -124,8 +124,42 @@ class Will:
     properties: Properties | None = None
 
 
+class MessagesIterator:
+    """Dynamic view of the client's message queue."""
+
+    def __init__(self, client: Client) -> None:
+        self._client = client
+
+    def __aiter__(self) -> AsyncIterator[Message]:
+        return self
+
+    async def __anext__(self) -> Message:
+        # Wait until we either (1) receive a message or (2) disconnect
+        task = self._client._loop.create_task(self._client._queue.get())  # noqa: SLF001
+        try:
+            done, _ = await asyncio.wait(
+                (task, self._client._disconnected),  # noqa: SLF001
+                return_when=asyncio.FIRST_COMPLETED,
+            )
+        # If the asyncio.wait is cancelled, we must also cancel the queue task
+        except asyncio.CancelledError:
+            task.cancel()
+            raise
+        # When we receive a message, return it
+        if task in done:
+            return task.result()
+        # If we disconnect from the broker, stop the generator with an exception
+        task.cancel()
+        msg = "Disconnected during message iteration"
+        raise MqttError(msg)
+
+    def __len__(self) -> int:
+        """Return the number of messages in the message queue."""
+        return self._client._queue.qsize()  # noqa: SLF001
+
+
 class Client:
-    """The async context manager that manages the connection to the broker.
+    """Asynchronous context manager for the connection to the MQTT broker.
 
     Args:
         hostname: The hostname or IP address of the remote broker.
@@ -144,7 +178,7 @@ class Client:
             client when it disconnects. If ``False``, the client is a persistent client
             and subscription information and queued messages will be retained when the
             client disconnects.
-        transport: The transport protocol to use. Either ``"tcp"`` or ``"websockets"``.
+        transport: The transport protocol to use. Either ``"tcp"``, ``"websockets"`` or ``"unix"``.
         timeout: The default timeout for all communication with the broker in seconds.
         keepalive: The keepalive timeout for the client in seconds.
         bind_address: The IP address of a local network interface to bind this client
@@ -155,7 +189,7 @@ class Client:
         max_queued_incoming_messages: Restricts the incoming message queue size. If the
             queue is full, further incoming messages are discarded. ``0`` or less means
             unlimited (the default).
-        max_queued_outgoing_messages: Resticts the outgoing message queue size. If the
+        max_queued_outgoing_messages: Restricts the outgoing message queue size. If the
             queue is full, further outgoing messages are discarded. ``0`` means
             unlimited (the default).
         max_inflight_messages: The maximum number of messages with QoS > ``0`` that can
@@ -169,12 +203,6 @@ class Client:
         socket_options: Options to pass to the underlying socket.
         websocket_path: The path to use for websockets.
         websocket_headers: The headers to use for websockets.
-
-    Attributes:
-        messages (typing.AsyncGenerator[aiomqtt.client.Message, None]):
-            Async generator that yields messages from the underlying message queue.
-        identifier (str):
-            The client identifier.
     """
 
     def __init__(  # noqa: C901, PLR0912, PLR0913, PLR0915
@@ -190,7 +218,7 @@ class Client:
         protocol: ProtocolVersion | None = None,
         will: Will | None = None,
         clean_session: bool | None = None,
-        transport: Literal["tcp", "websockets"] = "tcp",
+        transport: Literal["tcp", "websockets", "unix"] = "tcp",
         timeout: float | None = None,
         keepalive: int = 60,
         bind_address: str = "",
@@ -216,7 +244,7 @@ class Client:
         self._bind_port = bind_port
         self._clean_start = clean_start
         self._properties = properties
-        self._loop = asyncio.get_event_loop()
+        self._loop = asyncio.get_running_loop()
 
         # Connection state
         self._connected: asyncio.Future[None] = asyncio.Future()
@@ -321,17 +349,18 @@ class Client:
         self.timeout = timeout
 
     @property
-    def messages(self) -> AsyncGenerator[Message, None]:
-        return self._messages()
-
-    @property
     def identifier(self) -> str:
-        """Return the client identifier.
+        """The client's identifier.
 
         Note that paho-mqtt stores the client ID as `bytes` internally. We assume that
         the client ID is a UTF8-encoded string and decode it first.
         """
         return self._client._client_id.decode()  # noqa: SLF001
+
+    @property
+    def messages(self) -> MessagesIterator:
+        """Dynamic view of the client's message queue."""
+        return MessagesIterator(self)
 
     @property
     def _pending_calls(self) -> Generator[int, None, None]:
@@ -455,32 +484,6 @@ class Client:
         with self._pending_call(info.mid, confirmation, self._pending_publishes):
             # Wait for confirmation
             await self._wait_for(confirmation.wait(), timeout=timeout)
-
-    async def _messages(self) -> AsyncGenerator[Message, None]:
-        """Async generator that yields messages from the underlying message queue."""
-        while True:
-            # Wait until we either:
-            #  1. Receive a message
-            #  2. Disconnect from the broker
-            task = self._loop.create_task(self._queue.get())
-            try:
-                done, _ = await asyncio.wait(
-                    (task, self._disconnected), return_when=asyncio.FIRST_COMPLETED
-                )
-            except asyncio.CancelledError:
-                # If the asyncio.wait is cancelled, we must make sure
-                # to also cancel the underlying tasks.
-                task.cancel()
-                raise
-            if task in done:
-                # We received a message. Return the result.
-                yield task.result()
-            else:
-                # We were disconnected from the broker
-                task.cancel()
-                # Stop the generator with an exception
-                msg = "Disconnected during message iteration"
-                raise MqttError(msg)
 
     async def _wait_for(
         self, fut: Awaitable[T], timeout: float | None, **kwargs: Any
@@ -641,7 +644,7 @@ class Client:
     ) -> None:
         def callback() -> None:
             # client.loop_read() may raise an exception, such as BadPipe. It's
-            # usually a sign that the underlaying connection broke, therefore we
+            # usually a sign that the underlying connection broke, therefore we
             # disconnect straight away
             try:
                 client.loop_read()
@@ -672,7 +675,7 @@ class Client:
     ) -> None:
         def callback() -> None:
             # client.loop_write() may raise an exception, such as BadPipe. It's
-            # usually a sign that the underlaying connection broke, therefore we
+            # usually a sign that the underlying connection broke, therefore we
             # disconnect straight away
             try:
                 client.loop_write()
@@ -683,12 +686,12 @@ class Client:
         # paho-mqtt may call this function from the executor thread on which we've called
         # `self._client.connect()` (see [3]), so we can't do most operations on
         # self._loop directly.
-        self._loop.call_soon_threadsafe(self._loop.add_writer, sock, callback)
+        self._loop.call_soon_threadsafe(self._loop.add_writer, sock.fileno(), callback)
 
     def _on_socket_unregister_write(
         self, client: mqtt.Client, userdata: Any, sock: _PahoSocket
     ) -> None:
-        self._loop.remove_writer(sock)
+        self._loop.remove_writer(sock.fileno())
 
     async def _misc_loop(self) -> None:
         while self._client.loop_misc() == mqtt.MQTT_ERR_SUCCESS:
