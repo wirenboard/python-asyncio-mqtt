@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import asyncio
 import logging
 import pathlib
 import ssl
 import sys
+from typing import Any
 
 import anyio
 import anyio.abc
@@ -413,7 +415,7 @@ async def test_messages_view_is_reusable() -> None:
 @pytest.mark.network
 async def test_messages_view_multiple_tasks_concurrently() -> None:
     """Test that ``.messages`` can be used concurrently by multiple tasks."""
-    topic = TOPIC_PREFIX + "test_messages_generator_is_reentrant"
+    topic = TOPIC_PREFIX + "test_messages_view_multiple_tasks_concurrently"
     async with Client(HOSTNAME) as client, anyio.create_task_group() as tg:
 
         async def handle() -> None:
@@ -426,3 +428,33 @@ async def test_messages_view_multiple_tasks_concurrently() -> None:
         await client.subscribe(topic)
         await client.publish(topic, "foo")
         await client.publish(topic, "bar")
+
+
+@pytest.mark.network
+async def test_messages_view_len() -> None:
+    """Test that the ``__len__`` method of the messages view works correctly."""
+    topic = TOPIC_PREFIX + "test_messages_view_len"
+    count = 3
+
+    class TestClient(Client):
+        fut: asyncio.Future[None] = asyncio.Future()
+
+        def _on_message(
+            self, client: mqtt.Client, userdata: Any, message: mqtt.MQTTMessage
+        ) -> None:
+            super()._on_message(client, userdata, message)
+            self.fut.set_result(None)
+            self.fut = asyncio.Future()
+
+    async with TestClient(HOSTNAME) as client:
+        assert len(client.messages) == 0
+        await client.subscribe(topic, qos=2)
+        # Publish a message and wait for it to arrive
+        for index in range(count):
+            await client.publish(topic, None, qos=2)
+            await asyncio.wait_for(client.fut, timeout=1)
+            assert len(client.messages) == index + 1
+        # Empty the queue
+        for _ in range(count):
+            await client.messages.__anext__()
+        assert len(client.messages) == 0
