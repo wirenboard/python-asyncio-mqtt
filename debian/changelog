@@ -1,3 +1,9 @@
+python-asyncio-mqtt (2.3.1-1-wb100) stable; urgency=medium
+
+  * Build for Wiren Board
+
+ -- Petr Krasnoshchekov <petr.krasnoshchekov@wirenboard.com>  Thu, 20 Nov 2025 11:01:35 +0500
+
 python-asyncio-mqtt (2.3.1-1) unstable; urgency=medium
 
   * New upstream release
