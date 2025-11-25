@@ -1,1 +1,2 @@
-buildDebArchAll repos: ['release', 'devTools']
+buildDebArchAll customReleaseBranchPattern: '^dev/(.*)',
+                repos: ['release', 'devTools']
