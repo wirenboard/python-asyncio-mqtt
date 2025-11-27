@@ -182,15 +182,14 @@ class Client:
             except AttributeError:
                 loop = asyncio.get_event_loop()
 
+            # [3] Run connect() within an executor thread, since it blocks on socket
+            # connection for up to `keepalive` seconds: https://git.io/Jt5Yc
             if self._transport == "unix":
                 await loop.run_in_executor(
                     None, self._client.sock_connect,
-                    self._hostname, self._keepalive,
-                    self._clean_start, self._properties
+                    self._hostname, self._keepalive, self._clean_start, self._properties
                 )
             else:
-                # [3] Run connect() within an executor thread, since it blocks on socket
-                # connection for up to `keepalive` seconds: https://git.io/Jt5Yc
                 await loop.run_in_executor(
                     None, self._client.connect,
                     self._hostname, self._port, self._keepalive, self._bind_address, self._bind_port,
