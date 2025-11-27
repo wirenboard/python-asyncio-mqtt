@@ -1,3 +1,9 @@
+python-asyncio-mqtt (0.10.0-wb100-1) unstable; urgency=medium
+
+  * Allow connection to broker via unix socket
+
+ -- Nikolay Korotkiy <nikolay.korotkiy@wirenboard.com>  Thu, 27 Nov 2025 15:31:00 +0400
+
 python-asyncio-mqtt (0.10.0-3) unstable; urgency=medium
 
   [ Debian Janitor ]

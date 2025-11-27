@@ -29,6 +29,7 @@ try:
 except ImportError:
     from async_generator import asynccontextmanager  # type: ignore
 
+import paho_socket
 import paho.mqtt.client as mqtt  # type: ignore
 from paho.mqtt.properties import Properties
 
@@ -99,6 +100,7 @@ class Client:
     ):
         self._hostname = hostname
         self._port = port
+        self._transport = transport
         self._keepalive = keepalive
         self._bind_address = bind_address
         self._bind_port = bind_port
@@ -117,11 +119,11 @@ class Client:
         if protocol is None:
             protocol = ProtocolVersion.V311
 
-        self._client: mqtt.Client = mqtt.Client(
+        self._client: mqtt.Client = paho_socket.Client(
             client_id=client_id,
             protocol=protocol,
             clean_session=clean_session,
-            transport=transport,
+            transport=transport if transport != "unix" else "tcp",
         )
         self._client.on_connect = self._on_connect
         self._client.on_disconnect = self._on_disconnect
@@ -180,13 +182,20 @@ class Client:
             except AttributeError:
                 loop = asyncio.get_event_loop()
 
-            # [3] Run connect() within an executor thread, since it blocks on socket
-            # connection for up to `keepalive` seconds: https://git.io/Jt5Yc
-            await loop.run_in_executor(
-                None, self._client.connect,
-                self._hostname, self._port, self._keepalive, self._bind_address, self._bind_port,
-                self._clean_start, self._properties
-            )
+            if self._transport == "unix":
+                await loop.run_in_executor(
+                    None, self._client.sock_connect,
+                    self._hostname, self._keepalive,
+                    self._clean_start, self._properties
+                )
+            else:
+                # [3] Run connect() within an executor thread, since it blocks on socket
+                # connection for up to `keepalive` seconds: https://git.io/Jt5Yc
+                await loop.run_in_executor(
+                    None, self._client.connect,
+                    self._hostname, self._port, self._keepalive, self._bind_address, self._bind_port,
+                    self._clean_start, self._properties
+                )
             client_socket = self._client.socket()
             _set_client_socket_defaults(client_socket, self._socket_options)
         # paho.mqtt.Client.connect may raise one of several exceptions.
