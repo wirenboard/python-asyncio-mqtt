@@ -1,4 +1,4 @@
-python-asyncio-mqtt (0.10.0-wb101-1) unstable; urgency=medium
+python-asyncio-mqtt (0.10.0-wb101) unstable; urgency=medium
 
   * Make Client a reusable (but not reentrant) context manager (backported from v1.0.0)
 
