@@ -1,3 +1,9 @@
+python-asyncio-mqtt (0.10.0-wb101-1) unstable; urgency=medium
+
+  * Make Client a reusable (but not reentrant) context manager (backported from v1.0.0)
+
+ -- Nikolay Korotkiy <nikolay.korotkiy@wirenboard.com>  Wed, 03 Dec 2025 10:31:00 +0400
+
 python-asyncio-mqtt (0.10.0-wb100-1) unstable; urgency=medium
 
   * Allow connection to broker via unix socket
